@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FFmpeg.wasm Video Player</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js" defer></script>
+    <script src="https://unpkg.com/@ffmpeg/util@0.12.6/dist/ffmpeg-util.min.js" defer></script>
+    <script src="script.js" type="module" defer></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>FFmpeg.wasm Online Video Player</h1>
+        <p>
+          Load any local video file, transcode it to MP4 directly in your browser
+          using <code>ffmpeg.wasm</code>, and play it instantly without leaving the
+          page.
+        </p>
+      </header>
+
+      <section class="uploader">
+        <label class="file-label">
+          <span>Select a video file</span>
+          <input type="file" id="videoInput" accept="video/*" />
+        </label>
+        <button id="convertButton" type="button">Transcode &amp; Play</button>
+        <p class="status" id="statusMessage">Waiting for a file…</p>
+      </section>
+
+      <section class="player" hidden>
+        <video id="videoPlayer" controls></video>
+        <a id="downloadLink" class="download" download>Download transcoded video</a>
+      </section>
+
+      <section class="log">
+        <h2>Transcode Log</h2>
+        <pre id="logOutput"></pre>
+      </section>
+    </main>
+  </body>
+</html>

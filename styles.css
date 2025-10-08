@@ -1,0 +1,161 @@
+:root {
+  color-scheme: light dark;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: linear-gradient(160deg, #0f172a, #1e293b 40%, #334155 100%);
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #e2e8f0;
+}
+
+main {
+  width: min(960px, 94vw);
+  padding: 3rem;
+  border-radius: 24px;
+  background: rgba(15, 23, 42, 0.8);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(12px);
+  display: grid;
+  gap: 2.5rem;
+}
+
+h1 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(2rem, 5vw, 2.8rem);
+}
+
+header p {
+  margin: 0;
+  line-height: 1.6;
+  color: rgba(226, 232, 240, 0.8);
+}
+
+.uploader {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.file-label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.18);
+  color: #bfdbfe;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.file-label:hover,
+.file-label:focus-within {
+  background: rgba(59, 130, 246, 0.32);
+}
+
+.file-label input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+button {
+  padding: 0.85rem 1.8rem;
+  border-radius: 999px;
+  border: none;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #38bdf8, #6366f1);
+  color: #0f172a;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+button:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(99, 102, 241, 0.45);
+}
+
+.status {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.player {
+  display: grid;
+  gap: 1rem;
+}
+
+video {
+  width: 100%;
+  border-radius: 18px;
+  background: #000;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
+}
+
+.download {
+  color: #38bdf8;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.download:hover {
+  text-decoration: underline;
+}
+
+.log {
+  background: rgba(15, 23, 42, 0.65);
+  padding: 1.5rem;
+  border-radius: 18px;
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.08);
+}
+
+.log h2 {
+  margin: 0 0 0.75rem;
+}
+
+pre {
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: "Fira Code", "Source Code Pro", monospace;
+  max-height: 280px;
+  overflow-y: auto;
+  color: rgba(148, 163, 184, 0.85);
+}
+
+@media (max-width: 720px) {
+  main {
+    padding: 2rem;
+  }
+
+  .uploader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  button,
+  .file-label {
+    width: 100%;
+    justify-content: center;
+  }
+}
