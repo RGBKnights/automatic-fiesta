@@ -1,0 +1,5 @@
+node_modules/
+vendor/ffmpeg/ffmpeg-core.js
+vendor/ffmpeg/ffmpeg-core.wasm
+vendor/ffmpeg/ffmpeg-core.worker.js
+vendor/ffmpeg/ffmpeg-core.integrity.json

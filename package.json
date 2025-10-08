@@ -1,0 +1,11 @@
+{
+  "name": "automatic-fiesta",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare-core": "node scripts/prepare-ffmpeg-core.mjs"
+  },
+  "dependencies": {
+    "@ffmpeg/core": "0.12.6"
+  }
+}
