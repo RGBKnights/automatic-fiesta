@@ -19,6 +19,7 @@ let selectedFile = null;
 let ffmpeg = null;
 let isLoading = false;
 let hasVerifiedCore = false;
+let currentVideoUrl = null;
 
 const setStatus = (message) => {
   statusMessage.textContent = message;
@@ -126,6 +127,15 @@ const toggleLoading = (loading) => {
   videoInput.disabled = loading;
 };
 
+const releaseCurrentVideoUrl = () => {
+  if (!currentVideoUrl) {
+    return;
+  }
+
+  URL.revokeObjectURL(currentVideoUrl);
+  currentVideoUrl = null;
+};
+
 convertButton.addEventListener("click", async () => {
   if (isLoading) {
     return;
@@ -172,14 +182,35 @@ convertButton.addEventListener("click", async () => {
     setStatus("Reading transcoded output…");
     const outputData = instance.FS("readFile", outputName);
     const videoBlob = new Blob([outputData.buffer], { type: "video/mp4" });
-    const videoUrl = URL.createObjectURL(videoBlob);
+    const previousUrl = currentVideoUrl;
+    let videoUrl = null;
 
-    videoPlayer.src = videoUrl;
-    videoPlayer.load();
-    playerSection.hidden = false;
+    try {
+      videoUrl = URL.createObjectURL(videoBlob);
 
-    downloadLink.href = videoUrl;
-    downloadLink.download = `${selectedFile.name.replace(/\.[^/.]+$/, "") || "video"}-transcoded.mp4`;
+      videoPlayer.src = videoUrl;
+      videoPlayer.load();
+      playerSection.hidden = false;
+
+      downloadLink.href = videoUrl;
+      downloadLink.download = `${selectedFile.name.replace(/\.[^/.]+$/, "") || "video"}-transcoded.mp4`;
+
+      currentVideoUrl = videoUrl;
+
+      if (previousUrl && previousUrl !== videoUrl) {
+        URL.revokeObjectURL(previousUrl);
+      }
+    } catch (blobError) {
+      if (videoUrl) {
+        URL.revokeObjectURL(videoUrl);
+      }
+
+      if (previousUrl && previousUrl !== currentVideoUrl) {
+        currentVideoUrl = previousUrl;
+      }
+
+      throw blobError;
+    }
 
     setStatus("Transcode complete! Enjoy the video.");
     appendLog("Conversion finished successfully.");
@@ -193,3 +224,11 @@ convertButton.addEventListener("click", async () => {
 });
 
 appendLog("Ready. Load a video file to begin.");
+
+window.addEventListener("beforeunload", () => {
+  try {
+    releaseCurrentVideoUrl();
+  } catch (error) {
+    console.error("Failed to release video resources during unload", error);
+  }
+});
