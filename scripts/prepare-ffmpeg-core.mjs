@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 
 const rootDir = path.resolve(__dirname, "..");
 const distDir = path.join(rootDir, "node_modules", "@ffmpeg", "core", "dist");
-const vendorDir = path.join(rootDir, "vendor", "ffmpeg");
+const vendorDir = path.join(rootDir, "public", "vendor", "ffmpeg");
 
 const filesToCopy = [
   "ffmpeg-core.js",
