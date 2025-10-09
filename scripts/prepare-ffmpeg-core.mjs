@@ -16,25 +16,51 @@ const filesToCopy = [
   "ffmpeg-core.worker.js",
 ];
 
-const ensureDistExists = async () => {
+const copyFromDist = async () => {
   try {
     await fs.access(distDir);
   } catch (error) {
-    throw new Error(
-      "Cannot find @ffmpeg/core assets. Run `npm install` before executing this script."
-    );
+    return false;
   }
-};
 
-const copyAndHash = async () => {
+  for (const file of filesToCopy) {
+    const source = path.join(distDir, file);
+    try {
+      await fs.access(source);
+    } catch (error) {
+      return false;
+    }
+  }
+
   await fs.mkdir(vendorDir, { recursive: true });
-  const integrity = {};
 
   for (const file of filesToCopy) {
     const source = path.join(distDir, file);
     const target = path.join(vendorDir, file);
-
     await fs.copyFile(source, target);
+  }
+
+  return true;
+};
+
+const ensureVendorFiles = async () => {
+  for (const file of filesToCopy) {
+    const target = path.join(vendorDir, file);
+    try {
+      await fs.access(target);
+    } catch (error) {
+      throw new Error(
+        "Cannot find FFmpeg core assets. Fetch @ffmpeg/core via npm or download the files manually into public/vendor/ffmpeg before running this script."
+      );
+    }
+  }
+};
+
+const hashVendorFiles = async () => {
+  const integrity = {};
+
+  for (const file of filesToCopy) {
+    const target = path.join(vendorDir, file);
     const data = await fs.readFile(target);
     const hash = crypto.createHash("sha256").update(data).digest("base64");
     integrity[file] = `sha256-${hash}`;
@@ -58,8 +84,12 @@ const copyAndHash = async () => {
 };
 
 const main = async () => {
-  await ensureDistExists();
-  await copyAndHash();
+  const copied = await copyFromDist();
+  if (!copied) {
+    await ensureVendorFiles();
+  }
+
+  await hashVendorFiles();
 };
 
 main().catch((error) => {
